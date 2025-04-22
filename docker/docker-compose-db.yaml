@@ -1,0 +1,30 @@
+version: '3'
+
+networks:
+  did_network:
+    name: did_network
+
+services:
+  # Database for Government Organization
+  couchdb-government:
+    container_name: couchdb-government
+    image: couchdb:3.2.1
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=adminpw
+    ports:
+      - "5984:5984"
+    networks:
+      - did_network
+
+  # Database for Bank Organization
+  couchdb-bank:
+    container_name: couchdb-bank
+    image: couchdb:3.2.1
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=adminpw
+    ports:
+      - "6984:5984"
+    networks:
+      - did_network

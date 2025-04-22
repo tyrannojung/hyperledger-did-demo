@@ -1,0 +1,51 @@
+# Node.js dependencies
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+*~
+
+# Build and distribution
+dist/
+build/
+coverage/
+.nyc_output/
+
+# Logs
+logs/
+*.log
+
+# Docker
+docker/data/
+docker/volumes/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Wallet files (Hyperledger Fabric)
+wallet/
+
+# Fabric specific
+organizations/
+channel-artifacts/
+config/
+crypto-config/
+system-genesis-block/
