@@ -1,0 +1,312 @@
+{
+    "info": {
+        "_postman_id": "e7d1a3d5-4321-4567-8901-0e6d0a5d1234",
+        "name": "W3C DID Demo",
+        "description": "A Postman collection for testing the W3C-compliant DID system",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Government API",
+            "item": [
+                {
+                    "name": "Health Check",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://localhost:3001/api/health",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3001",
+                            "path": [
+                                "api",
+                                "health"
+                            ]
+                        },
+                        "description": "Check if the Government API is running"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Register DID",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"John Doe\",\n    \"age\": 30,\n    \"gender\": \"Male\",\n    \"occupation\": \"Engineer\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3001/api/did/register",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3001",
+                            "path": [
+                                "api",
+                                "did",
+                                "register"
+                            ]
+                        },
+                        "description": "Register a new DID with the government"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Resolve DID",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://localhost:3001/api/did/did:example:123456789abcdefghi",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3001",
+                            "path": [
+                                "api",
+                                "did",
+                                "did:example:123456789abcdefghi"
+                            ]
+                        },
+                        "description": "Resolve a DID to get its DID Document"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Credentials",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://localhost:3001/api/credentials/did:example:123456789abcdefghi",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3001",
+                            "path": [
+                                "api",
+                                "credentials",
+                                "did:example:123456789abcdefghi"
+                            ]
+                        },
+                        "description": "Get all verifiable credentials for a DID"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "List All DIDs",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://localhost:3001/api/did",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3001",
+                            "path": [
+                                "api",
+                                "did"
+                            ]
+                        },
+                        "description": "List all DIDs registered with the government"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Authorize Access",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"did\": \"did:example:123456789abcdefghi\",\n    \"orgId\": \"BankMSP\",\n    \"attributes\": [\"name\", \"age\"]\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3001/api/did/authorize",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3001",
+                            "path": [
+                                "api",
+                                "did",
+                                "authorize"
+                            ]
+                        },
+                        "description": "Authorize the bank to access specific attributes of a DID"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Revoke Access",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"did\": \"did:example:123456789abcdefghi\",\n    \"orgId\": \"BankMSP\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3001/api/did/revoke",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3001",
+                            "path": [
+                                "api",
+                                "did",
+                                "revoke"
+                            ]
+                        },
+                        "description": "Revoke the bank's access to a DID"
+                    },
+                    "response": []
+                }
+            ],
+            "description": "Government API endpoints for DID registration and management"
+        },
+        {
+            "name": "Bank API",
+            "item": [
+                {
+                    "name": "Health Check",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://localhost:3002/api/health",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3002",
+                            "path": [
+                                "api",
+                                "health"
+                            ]
+                        },
+                        "description": "Check if the Bank API is running"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get User Data",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer dummyToken",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "http://localhost:3002/api/user/did:example:123456789abcdefghi",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3002",
+                            "path": [
+                                "api",
+                                "user",
+                                "did:example:123456789abcdefghi"
+                            ]
+                        },
+                        "description": "Get user data with selective disclosure (only authorized attributes)"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Request Access",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"did\": \"did:example:123456789abcdefghi\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3002/api/user/request-access",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3002",
+                            "path": [
+                                "api",
+                                "user",
+                                "request-access"
+                            ]
+                        },
+                        "description": "Request access to a user's data"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Verify Presentation",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"presentation\": {\n        \"@context\": [\"https://www.w3.org/2018/credentials/v1\"],\n        \"type\": \"VerifiablePresentation\",\n        \"holder\": \"did:example:123456789abcdefghi\",\n        \"verifiableCredential\": [\n            {\n                \"@context\": [\"https://www.w3.org/2018/credentials/v1\"],\n                \"id\": \"did:example:123456789abcdefghi#vc-1\",\n                \"type\": [\"VerifiableCredential\", \"IdentityCredential\"],\n                \"issuer\": \"did:example:government\",\n                \"issuanceDate\": \"2023-01-01T00:00:00Z\",\n                \"credentialSubject\": {\n                    \"id\": \"did:example:123456789abcdefghi\",\n                    \"name\": \"John Doe\",\n                    \"age\": 30\n                }\n            }\n        ],\n        \"proof\": {\n            \"type\": \"Secp256k1Signature2018\",\n            \"created\": \"2023-01-01T00:00:00Z\",\n            \"verificationMethod\": \"did:example:123456789abcdefghi#key-1\",\n            \"proofPurpose\": \"authentication\",\n            \"proofValue\": \"example-proof-value\"\n        }\n    }\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3002/api/verify/presentation",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3002",
+                            "path": [
+                                "api",
+                                "verify",
+                                "presentation"
+                            ]
+                        },
+                        "description": "Verify a verifiable presentation"
+                    },
+                    "response": []
+                }
+            ],
+            "description": "Bank API endpoints for accessing authorized user data"
+        }
+    ]
+}

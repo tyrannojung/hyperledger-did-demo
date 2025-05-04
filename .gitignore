@@ -49,3 +49,8 @@ channel-artifacts/
 config/
 crypto-config/
 system-genesis-block/
+
+curr_ctx.yaml
+lc-state.yaml
+
+.llm-context/

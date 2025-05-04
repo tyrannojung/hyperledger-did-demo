@@ -1,15 +1,24 @@
-# Hyperledger Fabric DID Demo (간소화 버전)
+# Hyperledger Fabric DID Demo (W3C Standards Compliant)
 
-This project demonstrates a simple DID (Decentralized Identity) implementation using CouchDB and Node.js.
+This project demonstrates a W3C-compliant Decentralized Identity (DID) implementation using CouchDB and Node.js.
 
 ## Overview
 
-이 시스템은 다음과 같은 구성을 가집니다:
-- **정부 노드 (Government BP Node)**: 사용자 신원 정보를 등록하고 검증합니다 (이름, 나이, 성별, 직업)
-- **은행 노드 (Bank Read Node)**: 권한이 부여된 사용자 정보만 접근할 수 있습니다 (이름, 나이만)
-- **사용자 (User)**: 자신의 DID를 등록하고 데이터 공유 권한을 관리합니다
+This system consists of:
 
-## 프로젝트 구조
+- **Government Node**: Issues and validates W3C-compliant DIDs and Verifiable Credentials (name, age, gender, occupation)
+- **Bank Node**: Verifies and accesses selective data with user authorization (only name and age)
+- **User**: Controls their DID and authorizes selective disclosure
+
+## W3C DID Features Implemented
+
+- **Standard DID Syntax**: Uses the `did:method:identifier` syntax
+- **W3C DID Documents**: Properly structured with contexts, verification methods, authentication, etc.
+- **Verifiable Credentials**: Issues and manages W3C-compliant credentials
+- **Verifiable Presentations**: Supports selective disclosure of attributes
+- **Proof and Signatures**: Includes cryptographic proofs in DID documents and credentials
+
+## Project Structure
 
 ```
 hyperledger-did-demo/
@@ -17,100 +26,170 @@ hyperledger-did-demo/
 │   ├── government-api/          # Government API service
 │   │   ├── package.json         # Node.js dependencies
 │   │   └── src/                 # Source code
-│   │       └── app.js           # Express application
+│   │       ├── app.js           # Express application
+│   │       ├── utils/           # Utility functions
+│   │       │   └── did-utils.js # DID creation and management utilities
+│   │       └── services/        # Service modules
+│   │           └── credential-service.js # Credential management
 │   └── bank-api/                # Bank API service
 │       ├── package.json         # Node.js dependencies
 │       └── src/                 # Source code
 │           └── app.js           # Express application
 ├── docker/                      # Docker configuration
 │   └── docker-compose-db.yaml   # Database service definition
-└── postman/                     # Postman collection for testing
-    └── did-demo.json            # API request examples
+└── postman/                     # Postman collections for testing
+    └── did-demo-w3c.json        # W3C-compliant API request examples
 ```
 
-## 필수 조건
+## Prerequisites
 
-- Docker와 Docker Compose
-- Node.js v14 이상
+- Docker and Docker Compose
+- Node.js v14+
 - npm
 - Git
 
-## 설치 및 실행 방법
+## Setup Instructions
 
-1. 저장소 복제:
+1. Clone the repository:
+
    ```
    git clone https://github.com/yourusername/hyperledger-did-demo.git
    cd hyperledger-did-demo
    ```
 
-2. 의존성 패키지 설치:
+2. Install dependencies:
+
    ```
    cd api/government-api
    npm install
-   
+
    cd ../bank-api
    npm install
    ```
 
-3. CouchDB 데이터베이스 시작:
+3. Start CouchDB databases:
+
    ```
    cd ../../docker
    docker-compose -f docker-compose-db.yaml up -d
    ```
 
-4. API 서버 실행 (별도의 터미널에서):
+4. Start API servers (in separate terminals):
+
    ```
-   # 첫 번째 터미널에서
+   # First terminal
    cd ../api/government-api
    node src/app.js
-   
-   # 두 번째 터미널에서
+
+   # Second terminal
    cd ../api/bank-api
    node src/app.js
    ```
 
-5. API 서버는 다음 주소에서 접근할 수 있습니다:
-   - 정부 API: http://localhost:3001
-   - 은행 API: http://localhost:3002
+5. API endpoints are available at:
+   - Government API: http://localhost:3001
+   - Bank API: http://localhost:3002
 
-## API 엔드포인트
+## W3C DID API Endpoints
 
-### 정부 API (Government API)
+### Government API
 
-- `GET /api/health`: 서버 상태 확인
-  - 응답: `{ "status": "UP", "service": "Government API" }`
+- `GET /api/health`: Health check
 
-- `POST /api/did/register`: 새로운 사용자 신원 등록
-  - 요청 본문: `{ "userId": "user123", "name": "홍길동", "age": 30, "gender": "남성", "occupation": "개발자" }`
+  - Response: `{ "status": "UP", "service": "Government API" }`
 
-- `GET /api/did/:userId`: 사용자 신원 정보 조회
-  - 응답: `{ "userId": "user123", "name": "홍길동", "age": 30, "gender": "남성", "occupation": "개발자" }`
+- `POST /api/did/register`: Register a new DID
 
-- `POST /api/did/authorize`: 기관에 접근 권한 부여
-  - 요청 본문: `{ "userId": "user123", "orgId": "BankMSP", "attributes": ["name", "age"] }`
+  - Request: `{ "name": "John Doe", "age": 30, "gender": "Male", "occupation": "Engineer" }`
+  - Response: `{ "did": "did:example:123...", "didDocument": {...}, "privateKey": "...", "credential": {...} }`
 
-- `POST /api/did/revoke`: 접근 권한 취소
-  - 요청 본문: `{ "userId": "user123", "orgId": "BankMSP" }`
+- `GET /api/did/:did`: Resolve a DID to get its DID Document
 
-### 은행 API (Bank API)
+  - Response: W3C-compliant DID Document
 
-- `GET /api/health`: 서버 상태 확인
-  - 응답: `{ "status": "UP", "service": "Bank API" }`
+- `GET /api/credentials/:did`: Get verifiable credentials for a DID
 
-- `GET /api/user/:userId`: 권한 있는 사용자 정보만 조회 (이름, 나이)
-  - 필요 헤더: `Authorization: Bearer dummyToken`
-  - 응답: `{ "userId": "user123", "name": "홍길동", "age": 30 }`
+  - Response: W3C-compliant Verifiable Credential
 
-- `POST /api/user/request-access`: 사용자 정보 접근 요청
-  - 요청 본문: `{ "userId": "user123" }`
+- `GET /api/did`: List all DIDs registered with the government
 
-## 사용 흐름 (Flow)
+  - Response: Array of DIDs
 
-1. 사용자가 정부 API를 통해 신원 정보를 등록합니다
-2. 은행에서 특정 사용자 정보에 접근하려고 시도하면 접근이 거부됩니다
-3. 사용자가 정부 API를 통해 은행에게 특정 속성(이름, 나이)에 대한 접근 권한을 부여합니다
-4. 은행이 다시 사용자 정보를 요청하면 이번에는 권한이 부여된 속성(이름, 나이)만 조회할 수 있습니다
+- `POST /api/did/authorize`: Authorize selective disclosure
 
-## Postman 컬렉션으로 테스트하기
+  - Request: `{ "did": "did:example:123...", "orgId": "BankMSP", "attributes": ["name", "age"] }`
+  - Response: `{ "message": "Access granted...", "details": {...}, "presentation": {...} }`
 
-Postman 컬렉션(`postman/did-demo.json`)을 가져와서 API를 테스트할 수 있습니다.
+- `POST /api/did/revoke`: Revoke authorization
+  - Request: `{ "did": "did:example:123...", "orgId": "BankMSP" }`
+
+### Bank API
+
+- `GET /api/health`: Health check
+
+  - Response: `{ "status": "UP", "service": "Bank API" }`
+
+- `GET /api/user/:did`: Get user data with selective disclosure
+
+  - Headers: `Authorization: Bearer token`
+  - Response: `{ "holder": "did:example:123...", "attributes": { "name": "John Doe", "age": 30 }, ... }`
+
+- `POST /api/user/request-access`: Request access to user data
+
+  - Request: `{ "did": "did:example:123..." }`
+  - Response: Instructions for authorization
+
+- `POST /api/verify/presentation`: Verify a verifiable presentation
+  - Request: `{ "presentation": {...} }`
+  - Response: `{ "valid": true, ... }`
+
+## Flow Example
+
+1. Register a DID with the Government
+
+```
+POST http://localhost:3001/api/did/register
+{
+    "name": "John Doe",
+    "age": 30,
+    "gender": "Male",
+    "occupation": "Engineer"
+}
+```
+
+2. Bank requests access to the DID's data
+
+```
+POST http://localhost:3002/api/user/request-access
+{
+    "did": "did:example:123456789abcdefghi"
+}
+```
+
+3. User authorizes Bank to access only name and age
+
+```
+POST http://localhost:3001/api/did/authorize
+{
+    "did": "did:example:123456789abcdefghi",
+    "orgId": "BankMSP",
+    "attributes": ["name", "age"]
+}
+```
+
+4. Bank accesses the authorized data
+
+```
+GET http://localhost:3002/api/user/did:example:123456789abcdefghi
+Authorization: Bearer dummyToken
+```
+
+## Testing with Postman
+
+Import the Postman collection from `postman/did-demo-w3c.json` to test the W3C-compliant API endpoints. This collection includes all the necessary requests for testing both the Government and Bank API services.
+
+## Security Notes
+
+- This demo implements simplified cryptographic signing and verification for demonstration purposes.
+- In a production environment, proper key management and secure communication would be implemented.
+- The private keys should never be exposed in API responses as they are in this demo.
